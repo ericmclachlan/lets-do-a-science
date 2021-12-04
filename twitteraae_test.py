@@ -21,7 +21,7 @@ samples = [
 ]
 for sample in samples:
     try:
-        print(f"Sample Text: \"{sample}\"")
+        print(sample)
         # Run each sample through the classifier.
         prediction = predict.predict(sample.split())
         assert(len(prediction) == len(LABELS))
