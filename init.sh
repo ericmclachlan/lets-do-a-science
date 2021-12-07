@@ -2,7 +2,8 @@
 
 HOME=$(pwd)
 
-./twitteraae_init.sh
-./wtc_pa_init.sh
+./init_twitteraae.sh
+./init_wtc_pa.sh
+./init_perspective.sh
 
 cd $HOME
