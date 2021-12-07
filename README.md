@@ -4,6 +4,20 @@ Author: Eric McLachlan
 
 This work was done as the term project for a masters course titled "Societal Impacts of NLP" offered as part of the Computational Linguistics Masters of Science through the University of Washington.
 
+## Installation
+
+To install the necessary software, run:
+
+```sh
+python -m pip install -r requirements.txt
+```
+
+Add your Perspective API key to the environment:
+
+```sh
+export PERSPECTIVE_API_KEY="Replace this with your Perspective API key"
+```
+
 ## Resources
 
 ### TwitterAAE - Blodget et al (2016)

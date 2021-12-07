@@ -1,1 +1,5 @@
+# Perspective API
+google-api-python-client
+
+# Wikipedia Talk Corpus: Personal Attack corpus
 pandas
