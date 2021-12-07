@@ -38,15 +38,13 @@ def predict_constituency(text: str) -> List[float]:
     assert len(text) > 0
 
     # Get predictions for the constituents
+    predictions = None
     try:
         tokens = text.split()
         assert tokens
 
         predictions = predict.predict(tokens)
-        if predictions is None:
-            predictions = [float('NaN'), float('NaN'), float('NaN'), float('NaN')]
 
-        assert len(predictions) == len(LABELS)
     except Exception as ex:
         print("ERROR: Unable to get prediction for:")
         print("===")
@@ -55,6 +53,11 @@ def predict_constituency(text: str) -> List[float]:
         print(str(ex))
         print('---')
 
+    if predictions is None:
+        predictions = [float('NaN'), float('NaN'), float('NaN'), float('NaN')]
+
+    # Post-conditions:
+    assert len(predictions) == len(LABELS)
 
     return predictions
 
@@ -121,14 +124,6 @@ def add_constituents():
     # Save the corpus with annotations and constituents.
     filename = '../../corpus.with_constituents.tsv'
     df.to_csv(filename, sep='\t', quoting=csv.QUOTE_NONNUMERIC)
-
-    # Post-Conditions:
-
-    # Make sure the written file equals the original dataframe.
-    # read_df = pd.read_csv(filename, sep = '\t', index_col = 0)
-    # print(df.compare(read_df)) # Output any differences.
-    # assert df.equals(read_df)
-
 
 
 if __name__ == "__main__":

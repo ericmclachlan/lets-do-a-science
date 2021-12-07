@@ -4,6 +4,7 @@ A file for accessing Google's Perspective API.
 """
 
 import os
+import sys
 
 from googleapiclient import discovery
 
@@ -55,7 +56,27 @@ def PredictInsult(text: str):
     return prediction
 
 
-if __name__ == "__main__":
+def add_perspective():
+    print("TODO: Use the Perspective API to predict insults.")
 
+
+def _test():
     text = "This is a totally benign statement."
     prediction = PredictInsult(text)
+    print(f"Prediction: {prediction}")
+
+
+if __name__ == "__main__":
+
+    command: str = None
+    command = 'add_perspective' # TODO: Remove this line
+    if not command:
+        if len(sys.argv) > 1:
+            command = sys.argv[1]
+
+    if command == 'add_perspective':
+        add_perspective()
+
+    else:
+        # By default, just run a simple test.
+        _test()
