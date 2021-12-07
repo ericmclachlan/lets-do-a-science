@@ -1,3 +1,5 @@
+.cache/**
+.local/**
 twitteraae/**
 master.zip
 .wget-hsts
