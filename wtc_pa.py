@@ -6,7 +6,8 @@ Heavily inspired by a Jupyter notebook template provided here:
 
 """
 
-
+import csv
+import sys
 import pandas as pd
 
 # Constants
@@ -59,4 +60,26 @@ def _test():
 
 # Run a simple test.
 if __name__ == "__main__":
-    _test()
+
+    command: str = None
+    command = 'add_annotations' # TODO: Remove this line
+    if not command:
+        if len(sys.argv) > 1:
+            command = sys.argv[1]
+
+    if command == 'add_annotations':
+        df = load_corpus()
+
+        # Save the corpus with annotations to a file.
+        filename = 'corpus.with_annotations.tsv'
+        df.to_csv(filename, sep='\t', quoting=csv.QUOTE_NONNUMERIC)
+
+        # Post-Conditions:
+
+        # Make sure the written file equals the original dataframe.
+        read_df = pd.read_csv(filename, sep = '\t', index_col = 0)
+        assert df.equals(read_df)
+
+    else:
+        # By default, just run a simple test.
+        _test()

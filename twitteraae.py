@@ -6,6 +6,9 @@ Author: Eric McLachlan
 
 from typing import List
 
+import sys
+import csv
+import pandas as pd
 import predict
 
 
@@ -29,8 +32,29 @@ def predict_constituency(text: str) -> List[float]:
     """
     Makes a prediction of the consituency of the community represented by the specified text.
     """
-    predictions = predict.predict(text.split())
-    assert len(predictions) == len(LABELS)
+
+    # Pre-conditions:
+    assert text
+    assert len(text) > 0
+
+    # Get predictions for the constituents
+    try:
+        tokens = text.split()
+        assert tokens
+
+        predictions = predict.predict(tokens)
+        if predictions is None:
+            predictions = [float('NaN'), float('NaN'), float('NaN'), float('NaN')]
+
+        assert len(predictions) == len(LABELS)
+    except Exception as ex:
+        print("ERROR: Unable to get prediction for:")
+        print("===")
+        print(text)
+        print('---')
+        print(str(ex))
+        print('---')
+
 
     return predictions
 
@@ -67,5 +91,57 @@ def _test():
             print("\tError details unavailable.")
 
 
+def add_constituents():
+
+    # Read the corpus with annotations.
+    filename = '../../corpus.with_annotations.tsv'
+    df = pd.read_csv(filename, sep = '\t', index_col = 0)
+
+    african_american = []
+    hispanic = []
+    asian_constituency = []
+    white = []
+
+    for comment in df['comment']:
+
+        # Predict the constituencies.
+        constituencies = predict_constituency(comment)
+        assert len(constituencies) == len(LABELS)
+
+        african_american.append(constituencies[0])
+        hispanic.append(constituencies[1])
+        asian_constituency.append(constituencies[2])
+        white.append(constituencies[3])
+
+    df['african_american'] = african_american
+    df['hispanic'] = hispanic
+    df['asian_constituency'] = asian_constituency
+    df['white'] = white
+
+    # Save the corpus with annotations and constituents.
+    filename = '../../corpus.with_constituents.tsv'
+    df.to_csv(filename, sep='\t', quoting=csv.QUOTE_NONNUMERIC)
+
+    # Post-Conditions:
+
+    # Make sure the written file equals the original dataframe.
+    # read_df = pd.read_csv(filename, sep = '\t', index_col = 0)
+    # print(df.compare(read_df)) # Output any differences.
+    # assert df.equals(read_df)
+
+
+
 if __name__ == "__main__":
-    _test()
+
+    command: str = None
+    command = 'add_constituents' # TODO: Remove this line
+    if not command:
+        if len(sys.argv) > 1:
+            command = sys.argv[1]
+
+    if command == 'add_constituents':
+        add_constituents()
+
+    else:
+        # By default, just run a simple test.
+        _test()
